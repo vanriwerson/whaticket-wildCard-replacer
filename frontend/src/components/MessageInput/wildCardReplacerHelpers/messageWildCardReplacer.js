@@ -19,7 +19,7 @@ const replaceWildCardsInMessage = (message, customerObj) => {
   let replacedWildCardsMessage = message;
 
   wildCards.forEach((wildCard) => {   
-    const replaceKey = wildCard.replace(/[\{\}]/g,"");
+    const replaceKey = wildCard.replace(/[{}]/g,"");
 
     const replaceValue = customerObj[replaceKey];
 
