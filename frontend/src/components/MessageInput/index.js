@@ -36,6 +36,8 @@ import { ReplyMessageContext } from "../../context/ReplyingMessage/ReplyingMessa
 import { AuthContext } from "../../context/Auth/AuthContext";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import toastError from "../../errors/toastError";
+import getWildCardsFromTicket from "./wildCardReplacerHelpers/wildCardsGetter";
+import replaceWildCardsInMessage from "./wildCardReplacerHelpers/messageWildCardReplacer";
 
 const Mp3Recorder = new MicRecorder({ bitRate: 128 });
 
@@ -285,17 +287,26 @@ const MessageInput = ({ ticketStatus }) => {
     setMedias([]);
   };
 
+  const prepareMessage = async () => {
+    const wildCardsFromTicket = await getWildCardsFromTicket(ticketId);
+    const message = replaceWildCardsInMessage(inputMessage, wildCardsFromTicket);
+
+    return message;
+  }
+
   const handleSendMessage = async () => {
     if (inputMessage.trim() === "") return;
     setLoading(true);
+
+    const preparedMessage = await prepareMessage();
 
     const message = {
       read: 1,
       fromMe: true,
       mediaUrl: "",
       body: signMessage
-        ? `*${user?.name}:*\n${inputMessage.trim()}`
-        : inputMessage.trim(),
+        ? `*${user?.name}:*\n${preparedMessage.trim()}`
+        : preparedMessage.trim(),
       quotedMsg: replyingMessage,
     };
     try {
