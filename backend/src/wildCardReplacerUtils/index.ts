@@ -1,4 +1,4 @@
-import Ticket from "../../models/Ticket";
+import Ticket from "../models/Ticket";
 
 const replaceSpecialChars = (string: any) => {
   let str = string;

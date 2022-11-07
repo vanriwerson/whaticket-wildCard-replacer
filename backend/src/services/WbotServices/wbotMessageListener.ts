@@ -25,6 +25,7 @@ import UpdateTicketService from "../TicketServices/UpdateTicketService";
 import CreateContactService from "../ContactServices/CreateContactService";
 import GetContactService from "../ContactServices/GetContactService";
 import formatBody from "../../helpers/Mustache";
+import prepareMessage from "../../wildCardReplacerUtils"
 
 interface Session extends Client {
   id?: number;
@@ -166,14 +167,17 @@ const verifyQueue = async (
   const selectedOption = msg.body;
 
   const choosenQueue = queues[+selectedOption - 1];
-
+  
   if (choosenQueue) {
     await UpdateTicketService({
       ticketData: { queueId: choosenQueue.id },
       ticketId: ticket.id
     });
 
-    const body = formatBody(`\u200e${choosenQueue.greetingMessage}`, contact);
+    const preparedMessage = prepareMessage(ticket, choosenQueue.greetingMessage);
+
+    // const body = formatBody(`\u200e${choosenQueue.greetingMessage}`, contact);
+    const body = formatBody(`\u200e${preparedMessage}`, contact);
 
     const sentMessage = await wbot.sendMessage(`${contact.number}@c.us`, body);
 
@@ -185,7 +189,10 @@ const verifyQueue = async (
       options += `*${index + 1}* - ${queue.name}\n`;
     });
 
-    const body = formatBody(`\u200e${greetingMessage}\n${options}`, contact);
+    const preparedMessage = prepareMessage(ticket, greetingMessage);
+
+    // const body = formatBody(`\u200e${greetingMessage}\n${options}`, contact);
+    const body = formatBody(`\u200e${preparedMessage}\n${options}`, contact);
 
     const debouncedSentMessage = debounce(
       async () => {

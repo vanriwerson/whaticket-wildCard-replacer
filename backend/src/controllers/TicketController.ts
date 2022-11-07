@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { getIO } from "../libs/socket";
-import prepareMessage from "./wildCardReplacerUtils";
+import prepareMessage from "../wildCardReplacerUtils";
 
 import CreateTicketService from "../services/TicketServices/CreateTicketService";
 import DeleteTicketService from "../services/TicketServices/DeleteTicketService";
