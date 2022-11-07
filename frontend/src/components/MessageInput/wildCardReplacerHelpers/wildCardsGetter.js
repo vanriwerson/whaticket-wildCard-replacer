@@ -5,6 +5,7 @@ import replaceSpecialChars from "./specialCharReplacer";
 const getWildCardsFromTicket = async (ticketId) => {
   try {
     const { data } = await api.get(`/tickets/${ticketId}`);
+    console.log(data);
     
     const wildCardsFromTicket = {
       id: ticketId,

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { getIO } from "../libs/socket";
+import prepareMessage from "./wildCardReplacerUtils";
 
 import CreateTicketService from "../services/TicketServices/CreateTicketService";
 import DeleteTicketService from "../services/TicketServices/DeleteTicketService";
@@ -93,15 +94,17 @@ export const update = async (
     ticketData,
     ticketId
   });
-
+  
   if (ticket.status === "closed") {
     const whatsapp = await ShowWhatsAppService(ticket.whatsappId);
 
     const { farewellMessage } = whatsapp;
 
     if (farewellMessage) {
+      const preparedMessage = prepareMessage(ticket, farewellMessage)
+      
       await SendWhatsAppMessage({
-        body: formatBody(farewellMessage, ticket.contact),
+        body: formatBody(preparedMessage, ticket.contact),
         ticket
       });
     }
