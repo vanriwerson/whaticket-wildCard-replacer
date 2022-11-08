@@ -26,8 +26,8 @@ const replaceSpecialChars = (string: any) => {
 const getWildCardsFromTicket = (data: Ticket) => {
   const wildCardsFromTicket = {
     id: data.id,
-    user: data.user.name,
-    queue: data.queue.name,
+    user: data.user.name || "",
+    queue: data.queue.name || "",
     customer: data.contact.name,
   };
 

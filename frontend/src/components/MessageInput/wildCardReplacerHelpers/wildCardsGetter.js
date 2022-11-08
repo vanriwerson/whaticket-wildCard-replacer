@@ -9,8 +9,8 @@ const getWildCardsFromTicket = async (ticketId) => {
     
     const wildCardsFromTicket = {
       id: ticketId,
-      user: data.user.name,
-      queue: data.queue.name,
+      user: data.user.name || "",
+      queue: data.queue.name || "",
       customer: data.contact.name,
     };
 
